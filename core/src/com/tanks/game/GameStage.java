@@ -2,7 +2,11 @@ package com.tanks.game;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.scenes.scene2d.Actor;
+import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 
 /**
  * Created by majkic on 17.2.17..
@@ -10,47 +14,160 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 
 public class GameStage extends Stage {
 
-    private OnScreenObject tank;
-    private OnScreenObject rocket;
+    private OnScreenObject land;
+    private OnScreenObject sky;
+    private OnScreenObject tank1;
+    private OnScreenObject tank2;
+    private OnScreenObject bullet1;
+    private OnScreenObject bullet2;
+    private OnScreenObject leftArrow;
+    private OnScreenObject rightArrow;
 
     public GameStage() {
-        tank = new OnScreenObject();
-        tank.setTexture(new Texture("tank1.png"));
-        tank.setVisible(true);
-        tank.setWidth(80);
-        tank.setHeight(62);
-//        tank.setPosition(Gdx.graphics.getWidth() / 2 - tank.getWidth() / 2, Gdx.graphics.getHeight() / 2 - tank.getHeight() / 2);
-        tank.setPosition(40, Gdx.graphics.getHeight() / 2 - tank.getHeight() / 2);
+
+        land = new OnScreenObject();
+        land.setTexture(new Texture("land.jpg"));
+        land.setVisible(true);
+        land.setWidth(Gdx.graphics.getWidth());
+        land.setHeight(Gdx.graphics.getHeight() / 3);
+        land.setPosition(0, 0);
+
+        sky = new OnScreenObject();
+        sky.setTexture(new Texture("sky.jpg"));
+        sky.setVisible(true);
+        sky.setWidth(Gdx.graphics.getWidth());
+        sky.setHeight(Gdx.graphics.getHeight() - Gdx.graphics.getHeight() / 3);
+        sky.setPosition(0, Gdx.graphics.getHeight() / 3);
+
+        tank1 = new OnScreenObject();
+        tank1.setTexture(new Texture("tank1.png"));
+        tank1.setVisible(true);
+        tank1.setWidth(80);
+        tank1.setHeight(62);
+        tank1.setPosition(40, Gdx.graphics.getHeight() / 3);
+
+        tank2 = new OnScreenObject();
+        tank2.setTexture(new Texture("tank2.png"));
+        tank2.setVisible(true);
+        tank2.setWidth(80);
+        tank2.setHeight(62);
+        tank2.setPosition(Gdx.graphics.getWidth() - tank2.getWidth() - 40, Gdx.graphics.getHeight() / 3);
 
 
-        rocket = new Rocket();
-        rocket.setTexture(new Texture("rocket1.png"));
-        rocket.setVisible(false);
-        rocket.setWidth(15);
-        rocket.setHeight(15);
-        rocket.setPosition(tank.getX() + tank.getWidth(), tank.getY() + tank.getHeight());
+        bullet1 = new Bullet();
+        bullet1.setTexture(new Texture("bullet.png"));
+        bullet1.setVisible(false);
+        bullet1.setWidth(15);
+        bullet1.setHeight(15);
+        bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
 
-        addActor(rocket);
-        addActor(tank);
+        bullet2 = new Bullet();
+        bullet2.setTexture(new Texture("bullet.png"));
+        bullet2.setVisible(false);
+        bullet2.setWidth(15);
+        bullet2.setHeight(15);
+        bullet2.setPosition(tank2.getX() - bullet2.getWidth(), tank2.getY() + tank2.getHeight());
+
+        leftArrow = new OnScreenObject();
+        leftArrow.setTexture(new Texture("leftArrow.png"));
+        leftArrow.setVisible(true);
+        leftArrow.setWidth(60);
+        leftArrow.setHeight(60);
+        leftArrow.setPosition(30, 30);
+        leftArrow.addListener(new ClickListener(){
+            @Override
+            public void clicked(InputEvent event, float x, float y) {
+                super.clicked(event, x, y);
+                System.out.println("Left arrow clicked");
+            }
+        });
+
+        rightArrow = new OnScreenObject();
+        rightArrow.setTexture(new Texture("rightArrow.png"));
+        rightArrow.setVisible(true);
+        rightArrow.setWidth(60);
+        rightArrow.setHeight(60);
+        rightArrow.setPosition(120, 30);
+
+        addActor(land);
+        addActor(sky);
+        addActor(tank1);
+        addActor(tank2);
+        addActor(bullet1);
+        addActor(bullet2);
+        addActor(leftArrow);
+        addActor(rightArrow);
     }
 
-    public void update(){
-        rocket.setPosition(tank.getX() + tank.getWidth(), tank.getY() + tank.getHeight());
+    public void update1(){
+        bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
     }
 
-    public OnScreenObject getTank() {
-        return tank;
+    public void update2(){
+        bullet2.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
     }
 
-    public void setTank(OnScreenObject tank) {
-        this.tank = tank;
+    public OnScreenObject getTank1() {
+        return tank1;
     }
 
-    public OnScreenObject getRocket() {
-        return rocket;
+    public void setTank1(OnScreenObject tank1) {
+        this.tank1 = tank1;
     }
 
-    public void setRocket(OnScreenObject rocket) {
-        this.rocket = rocket;
+    public OnScreenObject getTank2() {
+        return tank2;
+    }
+
+    public void setTank2(OnScreenObject tank2) {
+        this.tank2 = tank2;
+    }
+
+    public OnScreenObject getBullet1() {
+        return bullet1;
+    }
+
+    public void setBullet1(OnScreenObject bullet1) {
+        this.bullet1 = bullet1;
+    }
+
+    public OnScreenObject getBullet2() {
+        return bullet2;
+    }
+
+    public void setBullet2(OnScreenObject bullet2) {
+        this.bullet2 = bullet2;
+    }
+
+    public OnScreenObject getLeftArrow() {
+        return leftArrow;
+    }
+
+    public void setLeftArrow(OnScreenObject leftArrow) {
+        this.leftArrow = leftArrow;
+    }
+
+    public OnScreenObject getRightArrow() {
+        return rightArrow;
+    }
+
+    public void setRightArrow(OnScreenObject rightArrow) {
+        this.rightArrow = rightArrow;
+    }
+
+    public OnScreenObject getLand() {
+        return land;
+    }
+
+    public void setLand(OnScreenObject land) {
+        this.land = land;
+    }
+
+    public OnScreenObject getSky() {
+        return sky;
+    }
+
+    public void setSky(OnScreenObject sky) {
+        this.sky = sky;
     }
 }
