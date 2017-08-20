@@ -6,12 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Event;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -33,6 +28,9 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     private Viewport vp;
     private final double ZOOM_SPEED = 0.004;
     private int turn = 0;
+    private static int MOVE_LENGTH = 5;
+    private boolean leftArrowClicked = false;
+    private boolean rightArrowClicked = false;
 
     @Override
     public void create() {
@@ -49,24 +47,6 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         bullet2 = ((GameStage) mainStage).getBullet2();
 
         leftArrow = ((GameStage) mainStage).getLeftArrow();
-//        leftArrow.addListener(new ClickListener(){
-//            @Override
-//            public void clicked(InputEvent event, float x, float y) {
-//                super.clicked(event, x, y);
-//                System.out.println("Click event");
-//                System.out.println("Tank 1 X : " + tank1.getX());
-//                if (turn % 2 == 0) {
-//                    tank1.started = true;
-//                    tank1.moveBy(50, 0);
-//                    tank1.started = false;
-//                } else {
-//                    tank2.started = true;
-//                    tank2.moveBy(50, 0);
-//                    tank2.started = false;
-//                }
-//                System.out.println("Tank 1 X : " + tank1.getX());
-//            }
-//        });
         rightArrow = ((GameStage) mainStage).getRightArrow();
 
         gd = new GestureDetector(this);
@@ -99,7 +79,12 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             bullet2.brzinaY = 0;
         }
 
-        tank1.setPosition(tank1.getX(), tank1.getY());
+        if (leftArrowClicked){
+            moveTankOnTurn(-MOVE_LENGTH);
+        }
+        if (rightArrowClicked){
+            moveTankOnTurn(MOVE_LENGTH);
+        }
 
         dt = Gdx.graphics.getDeltaTime();
         mainStage.act(dt);
@@ -152,11 +137,15 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
 
     @Override
     public boolean touchDown(float x, float y, int pointer, int button) {
+        leftArrowOnClick(x, y);
+        rightArrowOnClick(x, y);
         return false;
     }
 
     @Override
     public boolean tap(float x, float y, int count, int button) {
+        leftArrowClicked = false;
+        rightArrowClicked = false;
         return false;
     }
 
@@ -195,6 +184,32 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     @Override
     public void pinchStop() {
 
+    }
+
+    private boolean inRange(float value, float rangeStart, float rangeEnd) {
+        return rangeStart <= value && value <= rangeEnd;
+    }
+
+    private void leftArrowOnClick(float x, float y) {
+        if (inRange(x, leftArrow.getX(), leftArrow.getX() + leftArrow.getWidth())
+                && inRange(Gdx.graphics.getHeight() - y, leftArrow.getY(), leftArrow.getHeight() + leftArrow.getHeight())) {
+            leftArrowClicked = true;
+        }
+    }
+
+    private void rightArrowOnClick(float x, float y) {
+        if (inRange(x, rightArrow.getX(), rightArrow.getX() + rightArrow.getWidth())
+                && inRange(Gdx.graphics.getHeight() - y, rightArrow.getY(), rightArrow.getHeight() + rightArrow.getHeight())) {
+            rightArrowClicked = true;
+        }
+    }
+
+    private void moveTankOnTurn(int side){
+        if (turn % 2 == 0) {
+            tank1.moveBy(side, 0);
+        } else {
+            tank2.moveBy(side, 0);
+        }
     }
 
 }
