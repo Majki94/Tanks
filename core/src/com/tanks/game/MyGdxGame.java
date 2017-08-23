@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -21,6 +22,12 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     private OnScreenObject bullet2;
     private OnScreenObject leftArrow;
     private OnScreenObject rightArrow;
+    private OnScreenObject player1StringImage;
+    private OnScreenObject player2StringImage;
+    private Label player1ScoreLabel;
+    private Label player2ScoreLabel;
+    private int player1Score;
+    private int player2Score;
     private float dt;
     private GestureDetector gd;
     private float scale;
@@ -49,6 +56,12 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         leftArrow = ((GameStage) mainStage).getLeftArrow();
         rightArrow = ((GameStage) mainStage).getRightArrow();
 
+        player1StringImage = ((GameStage) mainStage).getPlayer1StringImage();
+        player2StringImage = ((GameStage) mainStage).getPlayer2StringImage();
+
+        player1ScoreLabel = ((GameStage) mainStage).getPlayer1ScoreLabel();
+        player2ScoreLabel = ((GameStage) mainStage).getPlayer2ScoreLabel();
+
         gd = new GestureDetector(this);
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
         camera.setToOrtho(false, Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -69,6 +82,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             ((Bullet) bullet1).elapsedTime = 0;
             bullet1.brzinaX = 0;
             bullet1.brzinaY = 0;
+            turn++;
         }
         if (bullet2.getY() < land.getHeight()) {
             bullet2.setVisible(false);
@@ -77,6 +91,15 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             ((Bullet) bullet2).elapsedTime = 0;
             bullet2.brzinaX = 0;
             bullet2.brzinaY = 0;
+            turn++;
+        }
+
+        if (turn % 2 == 0){
+            player1StringImage.setVisible(true);
+            player2StringImage.setVisible(false);
+        }else {
+            player1StringImage.setVisible(false);
+            player2StringImage.setVisible(true);
         }
 
         if (leftArrowClicked){
@@ -122,14 +145,14 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             bullet1.started = true;
             bullet1.brzinaX = velocityX * scale;
             bullet1.brzinaY = -velocityY * scale;
-            turn++;
+//            turn++;
         } else if (!bullet1.isVisible() && !bullet2.isVisible()) {
             //drugi igrac igra
             bullet2.setVisible(true);
             bullet2.started = true;
             bullet2.brzinaX = velocityX * scale;
             bullet2.brzinaY = -velocityY * scale;
-            turn++;
+//            turn++;
         }
 
         return false;
@@ -205,10 +228,17 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     }
 
     private void moveTankOnTurn(int side){
-        if (turn % 2 == 0) {
-            tank1.moveBy(side, 0);
+        if (!bullet1.isVisible() && !bullet2.isVisible()) {
+            if (turn % 2 == 0) {
+                tank1.moveBy(side, 0);
+                bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
+            } else {
+                tank2.moveBy(side, 0);
+                bullet2.setPosition(tank2.getX() - bullet2.getWidth(), tank2.getY() + tank2.getHeight());
+            }
         } else {
-            tank2.moveBy(side, 0);
+            leftArrowClicked = false;
+            rightArrowClicked = false;
         }
     }
 

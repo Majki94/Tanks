@@ -1,12 +1,11 @@
 package com.tanks.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.InputEvent;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.scenes.scene2d.utils.ClickListener;
+import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 /**
  * Created by majkic on 17.2.17..
@@ -22,6 +21,11 @@ public class GameStage extends Stage {
     private OnScreenObject bullet2;
     private OnScreenObject leftArrow;
     private OnScreenObject rightArrow;
+    private OnScreenObject player1StringImage;
+    private OnScreenObject player2StringImage;
+    private BitmapFont font;
+    private Label player1ScoreLabel;
+    private Label player2ScoreLabel;
 
     public GameStage() {
 
@@ -74,13 +78,6 @@ public class GameStage extends Stage {
         leftArrow.setWidth(60);
         leftArrow.setHeight(60);
         leftArrow.setPosition(30, 30);
-        leftArrow.addListener(new ClickListener(){
-            @Override
-            public void clicked(InputEvent event, float x, float y) {
-                super.clicked(event, x, y);
-                System.out.println("Left arrow clicked");
-            }
-        });
 
         rightArrow = new OnScreenObject();
         rightArrow.setTexture(new Texture("rightArrow.png"));
@@ -88,6 +85,30 @@ public class GameStage extends Stage {
         rightArrow.setWidth(60);
         rightArrow.setHeight(60);
         rightArrow.setPosition(120, 30);
+
+        player1StringImage = new OnScreenObject();
+        player1StringImage.setTexture(new Texture("player1.png"));
+        player1StringImage.setVisible(false);
+        player1StringImage.setWidth(100);
+        player1StringImage.setHeight(30);
+        player1StringImage.setPosition((Gdx.graphics.getWidth() - player1StringImage.getWidth()) / 2, Gdx.graphics.getHeight() - 40);
+
+        player2StringImage = new OnScreenObject();
+        player2StringImage.setTexture(new Texture("player2.png"));
+        player2StringImage.setVisible(false);
+        player2StringImage.setWidth(100);
+        player2StringImage.setHeight(30);
+        player2StringImage.setPosition((Gdx.graphics.getWidth() - player1StringImage.getWidth()) / 2, Gdx.graphics.getHeight() - 40);
+
+        font = new BitmapFont();
+
+        player1ScoreLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
+        player1ScoreLabel.setPosition(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.93f);
+        player1ScoreLabel.setFontScale(1);
+
+        player2ScoreLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
+        player2ScoreLabel.setPosition(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.93f);
+        player2ScoreLabel.setFontScale(1);
 
         addActor(land);
         addActor(sky);
@@ -97,13 +118,17 @@ public class GameStage extends Stage {
         addActor(bullet2);
         addActor(leftArrow);
         addActor(rightArrow);
+        addActor(player1StringImage);
+        addActor(player2StringImage);
+        addActor(player1ScoreLabel);
+        addActor(player2ScoreLabel);
     }
 
-    public void update1(){
+    public void update1() {
         bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
     }
 
-    public void update2(){
+    public void update2() {
         bullet2.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
     }
 
@@ -169,5 +194,45 @@ public class GameStage extends Stage {
 
     public void setSky(OnScreenObject sky) {
         this.sky = sky;
+    }
+
+    public OnScreenObject getPlayer1StringImage() {
+        return player1StringImage;
+    }
+
+    public void setPlayer1StringImage(OnScreenObject player1StringImage) {
+        this.player1StringImage = player1StringImage;
+    }
+
+    public OnScreenObject getPlayer2StringImage() {
+        return player2StringImage;
+    }
+
+    public void setPlayer2StringImage(OnScreenObject player2StringImage) {
+        this.player2StringImage = player2StringImage;
+    }
+
+    public BitmapFont getFont() {
+        return font;
+    }
+
+    public void setFont(BitmapFont font) {
+        this.font = font;
+    }
+
+    public Label getPlayer1ScoreLabel() {
+        return player1ScoreLabel;
+    }
+
+    public void setPlayer1ScoreLabel(Label player1ScoreLabel) {
+        this.player1ScoreLabel = player1ScoreLabel;
+    }
+
+    public Label getPlayer2ScoreLabel() {
+        return player2ScoreLabel;
+    }
+
+    public void setPlayer2ScoreLabel(Label player2ScoreLabel) {
+        this.player2ScoreLabel = player2ScoreLabel;
     }
 }
