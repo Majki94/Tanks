@@ -87,22 +87,10 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
 
         //nova raketa
         if (bullet1.getY() < land.getHeight()) {
-            bullet1.setVisible(false);
-            bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
-            bullet1.started = false;
-            ((Bullet) bullet1).elapsedTime = 0;
-            bullet1.brzinaX = 0;
-            bullet1.brzinaY = 0;
-            turn++;
+            reloadBullet1();
         }
         if (bullet2.getY() < land.getHeight()) {
-            bullet2.setVisible(false);
-            bullet2.setPosition(tank2.getX() - bullet2.getWidth(), tank2.getY() + tank2.getHeight());
-            bullet2.started = false;
-            ((Bullet) bullet2).elapsedTime = 0;
-            bullet2.brzinaX = 0;
-            bullet2.brzinaY = 0;
-            turn++;
+            reloadBullet2();
         }
 
         if (turn % 2 == 0) {
@@ -126,7 +114,20 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             moveTankOnTurn(MOVE_LENGTH);
         }
 
-        dt = Gdx.graphics.getDeltaTime();
+        if (bulletHitTank(bullet1, tank2)){
+            player1Score++;
+            System.out.println("Pogodak!!!!!!! Score : " + player1Score);
+            player1ScoreLabel.setText("" + player1Score);
+            reloadBullet1();
+        }
+        if (bulletHitTank(bullet2, tank1)){
+            player2Score++;
+            System.out.println("Pogodak!!!!!!! Score : " + player2Score);
+            player2ScoreLabel.setText("" + player2Score);
+            reloadBullet2();
+        }
+
+            dt = Gdx.graphics.getDeltaTime();
         mainStage.act(dt);
 
         Gdx.gl.glClearColor(1, 1, 1, 1);
@@ -138,6 +139,37 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         Gdx.input.setInputProcessor(multiplexer);
 
         mainStage.draw();
+    }
+
+    private void reloadBullet1(){
+        bullet1.setVisible(false);
+        bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
+        bullet1.started = false;
+        ((Bullet) bullet1).elapsedTime = 0;
+        bullet1.brzinaX = 0;
+        bullet1.brzinaY = 0;
+        turn++;
+    }
+
+    private void reloadBullet2(){
+        bullet2.setVisible(false);
+        bullet2.setPosition(tank2.getX() - bullet2.getWidth(), tank2.getY() + tank2.getHeight());
+        bullet2.started = false;
+        ((Bullet) bullet2).elapsedTime = 0;
+        bullet2.brzinaX = 0;
+        bullet2.brzinaY = 0;
+        turn++;
+    }
+
+    private boolean bulletHitTank(OnScreenObject bullet, OnScreenObject tank) {
+        float bulletMiddleX = bullet.getX() + bullet.getWidth() / 2;
+        float bulletMiddleY = bullet.getY() + bullet.getHeight() / 2;
+        if (inRange(bulletMiddleX, tank.getX(), tank.getX() + tank.getWidth()) &&
+                inRange(bulletMiddleY, tank.getY(), tank.getY() + tank.getHeight())) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
@@ -164,14 +196,12 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             bullet1.started = true;
             bullet1.brzinaX = velocityX * scale;
             bullet1.brzinaY = -velocityY * scale;
-//            turn++;
         } else if (!bullet1.isVisible() && !bullet2.isVisible()) {
             //drugi igrac igra
             bullet2.setVisible(true);
             bullet2.started = true;
             bullet2.brzinaX = velocityX * scale;
             bullet2.brzinaY = -velocityY * scale;
-//            turn++;
         }
 
         return false;
