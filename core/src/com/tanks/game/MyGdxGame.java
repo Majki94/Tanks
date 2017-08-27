@@ -43,6 +43,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     private OnScreenObject weaponPicker1;
     private OnScreenObject weaponPicker2;
     private OnScreenObject weaponPicker3;
+    private OnScreenObject weaponPickerBg;
 
     @Override
     public void create() {
@@ -67,6 +68,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         player1ScoreLabel = ((GameStage) mainStage).getPlayer1ScoreLabel();
         player2ScoreLabel = ((GameStage) mainStage).getPlayer2ScoreLabel();
 
+        weaponPickerBg = ((GameStage) mainStage).getWeaponPickerBg();
         weaponPicker1 = ((GameStage) mainStage).getWeaponPicker1();
         weaponPicker2 = ((GameStage) mainStage).getWeaponPicker2();
         weaponPicker3 = ((GameStage) mainStage).getWeaponPicker3();
@@ -106,9 +108,15 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         if (turn % 2 == 0) {
             player1StringImage.setVisible(true);
             player2StringImage.setVisible(false);
+            int type = ((Bullet) bullet1).getCurrentType();
+            OnScreenObject onScreenObject = getWeaponForCurrentType(type);
+            weaponPickerBg.setPosition(onScreenObject.getX(), onScreenObject.getY());
         } else {
             player1StringImage.setVisible(false);
             player2StringImage.setVisible(true);
+            int type = ((Bullet) bullet2).getCurrentType();
+            OnScreenObject onScreenObject = getWeaponForCurrentType(type);
+            weaponPickerBg.setPosition(onScreenObject.getX(), onScreenObject.getY());
         }
 
         if (leftArrowClicked) {
@@ -260,15 +268,29 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         if (inRange(x, weapon.getX(), weapon.getX() + weapon.getWidth()) &&
                 inRange(Gdx.graphics.getHeight() - y, weapon.getY(), weapon.getHeight() + weapon.getHeight())) {
             if (turn % 2 == 0) {
-                setWeapon((Bullet) bullet1, weaponType);
+                setWeapon(weapon, (Bullet) bullet1, weaponType);
             } else {
-                setWeapon((Bullet) bullet2, weaponType);
+                setWeapon(weapon, (Bullet) bullet2, weaponType);
             }
         }
     }
 
-    private void setWeapon(Bullet bullet, int weaponType) {
-        bullet.setCurrentType(weaponType);
+    private void setWeapon(OnScreenObject onScreenObject, Bullet bullet, int weaponType) {
+        if (!bullet.isVisible()) {
+            bullet.setCurrentType(weaponType);
+            weaponPickerBg.setPosition(onScreenObject.getX(), onScreenObject.getY());
+            weaponPickerBg.setVisible(true);
+        }
+    }
+
+    private OnScreenObject getWeaponForCurrentType(int type) {
+        if (type == Bullet.TYPE_0) {
+            return weaponPicker1;
+        } else if (type == Bullet.TYPE_1) {
+            return weaponPicker2;
+        } else {
+            return weaponPicker3;
+        }
     }
 
 }

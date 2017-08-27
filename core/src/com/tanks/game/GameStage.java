@@ -29,6 +29,7 @@ public class GameStage extends Stage {
     private BitmapFont font;
     private Label player1ScoreLabel;
     private Label player2ScoreLabel;
+    private OnScreenObject weaponPickerBg;
     private OnScreenObject weaponPicker1;
     private OnScreenObject weaponPicker2;
     private OnScreenObject weaponPicker3;
@@ -115,6 +116,13 @@ public class GameStage extends Stage {
         player2ScoreLabel.setPosition(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.93f);
         player2ScoreLabel.setFontScale(1);
 
+        weaponPickerBg = new OnScreenObject();
+        weaponPickerBg.setTexture(new Texture("weaponPickerBg.png"));
+        weaponPickerBg.setVisible(true);
+        weaponPickerBg.setWidth(WEAPON_PICKER_SIZE);
+        weaponPickerBg.setHeight(WEAPON_PICKER_SIZE);
+        weaponPickerBg.setPosition(getWidth() - 3 * WEAPON_PICKER_SIZE - 10, 10);
+
         weaponPicker1 = new OnScreenObject();
         weaponPicker1.setTexture(new Texture("bullet.png"));
         weaponPicker1.setVisible(true);
@@ -152,6 +160,7 @@ public class GameStage extends Stage {
         addActor(weaponPicker1);
         addActor(weaponPicker2);
         addActor(weaponPicker3);
+        addActor(weaponPickerBg);
     }
 
     public void update1() {
@@ -288,5 +297,13 @@ public class GameStage extends Stage {
 
     public void setWeaponPicker3(OnScreenObject weaponPicker3) {
         this.weaponPicker3 = weaponPicker3;
+    }
+
+    public OnScreenObject getWeaponPickerBg() {
+        return weaponPickerBg;
+    }
+
+    public void setWeaponPickerBg(OnScreenObject weaponPickerBg) {
+        this.weaponPickerBg = weaponPickerBg;
     }
 }
