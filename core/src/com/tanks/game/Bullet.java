@@ -9,9 +9,9 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 
 public class Bullet extends OnScreenObject {
 
-    public static int TYPE_0 = 0;
-    public static int TYPE_1 = 1;
-    public static int TYPE_2 = 2;
+    public static final int TYPE_0 = 0;
+    public static final int TYPE_1 = 1;
+    public static final int TYPE_2 = 2;
 
     float elapsedTime = 0;
     private double halfTime;
@@ -33,15 +33,15 @@ public class Bullet extends OnScreenObject {
         return super.hit(x, y, touchable);
     }
 
-    public void setType(int weaponType){
+    public void setCurrentType(int weaponType){
         switch (weaponType) {
-            case 0:
+            case TYPE_0:
                 setTexture(new Texture("bullet.png"));
                 break;
-            case 1:
+            case TYPE_1:
                 setTexture(new Texture("blueBullet.png"));
                 break;
-            case 2:
+            case TYPE_2:
                 setTexture(new Texture("redBullet.png"));
                 break;
         }
@@ -54,7 +54,4 @@ public class Bullet extends OnScreenObject {
         return currentType;
     }
 
-    public void setCurrentType(int currentType) {
-        this.currentType = currentType;
-    }
 }

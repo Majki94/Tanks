@@ -173,9 +173,9 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     public boolean touchDown(float x, float y, int pointer, int button) {
         leftArrowOnClick(x, y);
         rightArrowOnClick(x, y);
-        weaponOnClick(weaponPicker1, x, y, 0);
-        weaponOnClick(weaponPicker2, x, y, 1);
-        weaponOnClick(weaponPicker3, x, y, 2);
+        weaponOnClick(weaponPicker1, x, y, Bullet.TYPE_0);
+        weaponOnClick(weaponPicker2, x, y, Bullet.TYPE_1);
+        weaponOnClick(weaponPicker3, x, y, Bullet.TYPE_2);
         return false;
     }
 
@@ -268,8 +268,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     }
 
     private void setWeapon(Bullet bullet, int weaponType) {
-        System.out.println("weapon clicked");
-        bullet.setType(weaponType);
+        bullet.setCurrentType(weaponType);
     }
 
 }
