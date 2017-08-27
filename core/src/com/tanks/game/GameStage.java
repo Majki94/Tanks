@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Align;
 
 /**
  * Created by majkic on 17.2.17..
@@ -29,6 +30,10 @@ public class GameStage extends Stage {
     private BitmapFont font;
     private Label player1ScoreLabel;
     private Label player2ScoreLabel;
+    private Label roundLabel;
+    private OnScreenObject player1Wins;
+    private OnScreenObject player2Wins;
+    private OnScreenObject noWinner;
     private OnScreenObject weaponPickerBg;
     private OnScreenObject weaponPicker1;
     private OnScreenObject weaponPicker2;
@@ -97,24 +102,31 @@ public class GameStage extends Stage {
         player1StringImage.setVisible(false);
         player1StringImage.setWidth(100);
         player1StringImage.setHeight(30);
-        player1StringImage.setPosition((Gdx.graphics.getWidth() - player1StringImage.getWidth()) / 2, Gdx.graphics.getHeight() - 40);
+        player1StringImage.setPosition((Gdx.graphics.getWidth() - player1StringImage.getWidth()) / 2, Gdx.graphics.getHeight() - 60);
 
         player2StringImage = new OnScreenObject();
         player2StringImage.setTexture(new Texture("player2.png"));
         player2StringImage.setVisible(false);
         player2StringImage.setWidth(100);
         player2StringImage.setHeight(30);
-        player2StringImage.setPosition((Gdx.graphics.getWidth() - player1StringImage.getWidth()) / 2, Gdx.graphics.getHeight() - 40);
+        player2StringImage.setPosition((Gdx.graphics.getWidth() - player1StringImage.getWidth()) / 2, Gdx.graphics.getHeight() - 60);
 
         font = new BitmapFont();
 
         player1ScoreLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
+        player1ScoreLabel.setAlignment(Align.center);
         player1ScoreLabel.setPosition(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.93f);
         player1ScoreLabel.setFontScale(1);
 
         player2ScoreLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
+        player2ScoreLabel.setAlignment(Align.center);
         player2ScoreLabel.setPosition(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.93f);
         player2ScoreLabel.setFontScale(1);
+
+        roundLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
+        roundLabel.setAlignment(Align.center);
+        roundLabel.setPosition((Gdx.graphics.getWidth() - roundLabel.getWidth()) / 2, Gdx.graphics.getHeight() - 20);
+        roundLabel.setFontScale(1);
 
         weaponPickerBg = new OnScreenObject();
         weaponPickerBg.setTexture(new Texture("weaponPickerBg.png"));
@@ -144,6 +156,26 @@ public class GameStage extends Stage {
         weaponPicker3.setHeight(WEAPON_PICKER_SIZE);
         weaponPicker3.setPosition(getWidth() - WEAPON_PICKER_SIZE - 10, 10);
 
+        player1Wins = new OnScreenObject();
+        player1Wins.setTexture(new Texture("player1Wins.png"));
+        player1Wins.setVisible(false);
+        player1Wins.setWidth(500);
+        player1Wins.setHeight(60);
+        player1Wins.setPosition((Gdx.graphics.getWidth() - player1Wins.getWidth())/2, (Gdx.graphics.getHeight() - player1Wins.getHeight())/2);
+
+        player2Wins = new OnScreenObject();
+        player2Wins.setTexture(new Texture("player2Wins.png"));
+        player2Wins.setVisible(false);
+        player2Wins.setWidth(500);
+        player2Wins.setHeight(60);
+        player2Wins.setPosition((Gdx.graphics.getWidth() - player2Wins.getWidth())/2, (Gdx.graphics.getHeight() - player2Wins.getHeight())/2);
+
+        noWinner = new OnScreenObject();
+        noWinner.setTexture(new Texture("player2Wins.png"));
+        noWinner.setVisible(false);
+        noWinner.setWidth(500);
+        noWinner.setHeight(60);
+        noWinner.setPosition((Gdx.graphics.getWidth() - noWinner.getWidth())/2, (Gdx.graphics.getHeight() - noWinner.getHeight())/2);
 
         addActor(land);
         addActor(sky);
@@ -157,10 +189,14 @@ public class GameStage extends Stage {
         addActor(player2StringImage);
         addActor(player1ScoreLabel);
         addActor(player2ScoreLabel);
+        addActor(roundLabel);
         addActor(weaponPicker1);
         addActor(weaponPicker2);
         addActor(weaponPicker3);
         addActor(weaponPickerBg);
+        addActor(player1Wins);
+        addActor(player2Wins);
+        addActor(noWinner);
     }
 
     public void update1() {
@@ -305,5 +341,37 @@ public class GameStage extends Stage {
 
     public void setWeaponPickerBg(OnScreenObject weaponPickerBg) {
         this.weaponPickerBg = weaponPickerBg;
+    }
+
+    public Label getRoundLabel() {
+        return roundLabel;
+    }
+
+    public void setRoundLabel(Label roundLabel) {
+        this.roundLabel = roundLabel;
+    }
+
+    public OnScreenObject getPlayer1Wins() {
+        return player1Wins;
+    }
+
+    public void setPlayer1Wins(OnScreenObject player1Wins) {
+        this.player1Wins = player1Wins;
+    }
+
+    public OnScreenObject getPlayer2Wins() {
+        return player2Wins;
+    }
+
+    public void setPlayer2Wins(OnScreenObject player2Wins) {
+        this.player2Wins = player2Wins;
+    }
+
+    public OnScreenObject getNoWinner() {
+        return noWinner;
+    }
+
+    public void setNoWinner(OnScreenObject noWinner) {
+        this.noWinner = noWinner;
     }
 }
