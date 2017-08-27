@@ -13,6 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.ui.Label;
 
 public class GameStage extends Stage {
 
+    private static final int WEAPON_PICKER_SIZE = 50;
+    public static final int BULLET_SIZE = 15;
+
     private OnScreenObject land;
     private OnScreenObject sky;
     private OnScreenObject tank1;
@@ -26,6 +29,9 @@ public class GameStage extends Stage {
     private BitmapFont font;
     private Label player1ScoreLabel;
     private Label player2ScoreLabel;
+    private OnScreenObject weaponPicker1;
+    private OnScreenObject weaponPicker2;
+    private OnScreenObject weaponPicker3;
 
     public GameStage() {
 
@@ -57,19 +63,18 @@ public class GameStage extends Stage {
         tank2.setHeight(62);
         tank2.setPosition(Gdx.graphics.getWidth() - tank2.getWidth() - 40, Gdx.graphics.getHeight() / 3);
 
-
         bullet1 = new Bullet();
         bullet1.setTexture(new Texture("bullet.png"));
         bullet1.setVisible(false);
-        bullet1.setWidth(15);
-        bullet1.setHeight(15);
+        bullet1.setWidth(BULLET_SIZE);
+        bullet1.setHeight(BULLET_SIZE);
         bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
 
         bullet2 = new Bullet();
         bullet2.setTexture(new Texture("bullet.png"));
         bullet2.setVisible(false);
-        bullet2.setWidth(15);
-        bullet2.setHeight(15);
+        bullet2.setWidth(BULLET_SIZE);
+        bullet2.setHeight(BULLET_SIZE);
         bullet2.setPosition(tank2.getX() - bullet2.getWidth(), tank2.getY() + tank2.getHeight());
 
         leftArrow = new OnScreenObject();
@@ -110,6 +115,28 @@ public class GameStage extends Stage {
         player2ScoreLabel.setPosition(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.93f);
         player2ScoreLabel.setFontScale(1);
 
+        weaponPicker1 = new OnScreenObject();
+        weaponPicker1.setTexture(new Texture("bullet.png"));
+        weaponPicker1.setVisible(true);
+        weaponPicker1.setWidth(WEAPON_PICKER_SIZE);
+        weaponPicker1.setHeight(WEAPON_PICKER_SIZE);
+        weaponPicker1.setPosition(getWidth() - 3 * WEAPON_PICKER_SIZE - 10, 10);
+
+        weaponPicker2 = new OnScreenObject();
+        weaponPicker2.setTexture(new Texture("blueBullet.png"));
+        weaponPicker2.setVisible(true);
+        weaponPicker2.setWidth(WEAPON_PICKER_SIZE);
+        weaponPicker2.setHeight(WEAPON_PICKER_SIZE);
+        weaponPicker2.setPosition(getWidth() - 2 * WEAPON_PICKER_SIZE - 10, 10);
+
+        weaponPicker3 = new OnScreenObject();
+        weaponPicker3.setTexture(new Texture("redBullet.png"));
+        weaponPicker3.setVisible(true);
+        weaponPicker3.setWidth(WEAPON_PICKER_SIZE);
+        weaponPicker3.setHeight(WEAPON_PICKER_SIZE);
+        weaponPicker3.setPosition(getWidth() - WEAPON_PICKER_SIZE - 10, 10);
+
+
         addActor(land);
         addActor(sky);
         addActor(tank1);
@@ -122,6 +149,9 @@ public class GameStage extends Stage {
         addActor(player2StringImage);
         addActor(player1ScoreLabel);
         addActor(player2ScoreLabel);
+        addActor(weaponPicker1);
+        addActor(weaponPicker2);
+        addActor(weaponPicker3);
     }
 
     public void update1() {
@@ -234,5 +264,29 @@ public class GameStage extends Stage {
 
     public void setPlayer2ScoreLabel(Label player2ScoreLabel) {
         this.player2ScoreLabel = player2ScoreLabel;
+    }
+
+    public OnScreenObject getWeaponPicker1() {
+        return weaponPicker1;
+    }
+
+    public void setWeaponPicker1(OnScreenObject weaponPicker1) {
+        this.weaponPicker1 = weaponPicker1;
+    }
+
+    public OnScreenObject getWeaponPicker2() {
+        return weaponPicker2;
+    }
+
+    public void setWeaponPicker2(OnScreenObject weaponPicker2) {
+        this.weaponPicker2 = weaponPicker2;
+    }
+
+    public OnScreenObject getWeaponPicker3() {
+        return weaponPicker3;
+    }
+
+    public void setWeaponPicker3(OnScreenObject weaponPicker3) {
+        this.weaponPicker3 = weaponPicker3;
     }
 }

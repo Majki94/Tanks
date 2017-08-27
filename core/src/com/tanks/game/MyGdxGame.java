@@ -2,6 +2,7 @@ package com.tanks.game;
 
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.InputMultiplexer;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
@@ -13,6 +14,7 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MyGdxGame implements ApplicationListener, GestureDetector.GestureListener {
 
+    private InputMultiplexer multiplexer;
     private Stage mainStage;
     private OnScreenObject land;
     private OnScreenObject sky;
@@ -38,6 +40,9 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     private static int MOVE_LENGTH = 5;
     private boolean leftArrowClicked = false;
     private boolean rightArrowClicked = false;
+    private OnScreenObject weaponPicker1;
+    private OnScreenObject weaponPicker2;
+    private OnScreenObject weaponPicker3;
 
     @Override
     public void create() {
@@ -61,6 +66,10 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
 
         player1ScoreLabel = ((GameStage) mainStage).getPlayer1ScoreLabel();
         player2ScoreLabel = ((GameStage) mainStage).getPlayer2ScoreLabel();
+
+        weaponPicker1 = ((GameStage) mainStage).getWeaponPicker1();
+        weaponPicker2 = ((GameStage) mainStage).getWeaponPicker2();
+        weaponPicker3 = ((GameStage) mainStage).getWeaponPicker3();
 
         gd = new GestureDetector(this);
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -94,18 +103,18 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             turn++;
         }
 
-        if (turn % 2 == 0){
+        if (turn % 2 == 0) {
             player1StringImage.setVisible(true);
             player2StringImage.setVisible(false);
-        }else {
+        } else {
             player1StringImage.setVisible(false);
             player2StringImage.setVisible(true);
         }
 
-        if (leftArrowClicked){
+        if (leftArrowClicked) {
             moveTankOnTurn(-MOVE_LENGTH);
         }
-        if (rightArrowClicked){
+        if (rightArrowClicked) {
             moveTankOnTurn(MOVE_LENGTH);
         }
 
@@ -115,8 +124,10 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-
-        Gdx.input.setInputProcessor(gd);
+        multiplexer = new InputMultiplexer();
+        multiplexer.addProcessor(mainStage);
+        multiplexer.addProcessor(gd);
+        Gdx.input.setInputProcessor(multiplexer);
 
         mainStage.draw();
     }
@@ -162,6 +173,9 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     public boolean touchDown(float x, float y, int pointer, int button) {
         leftArrowOnClick(x, y);
         rightArrowOnClick(x, y);
+        weaponOnClick(weaponPicker1, x, y, 0);
+        weaponOnClick(weaponPicker2, x, y, 1);
+        weaponOnClick(weaponPicker3, x, y, 2);
         return false;
     }
 
@@ -227,7 +241,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         }
     }
 
-    private void moveTankOnTurn(int side){
+    private void moveTankOnTurn(int side) {
         if (!bullet1.isVisible() && !bullet2.isVisible()) {
             if (turn % 2 == 0) {
                 tank1.moveBy(side, 0);
@@ -240,6 +254,22 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             leftArrowClicked = false;
             rightArrowClicked = false;
         }
+    }
+
+    private void weaponOnClick(OnScreenObject weapon, float x, float y, int weaponType) {
+        if (inRange(x, weapon.getX(), weapon.getX() + weapon.getWidth()) &&
+                inRange(Gdx.graphics.getHeight() - y, weapon.getY(), weapon.getHeight() + weapon.getHeight())) {
+            if (turn % 2 == 0) {
+                setWeapon((Bullet) bullet1, weaponType);
+            } else {
+                setWeapon((Bullet) bullet2, weaponType);
+            }
+        }
+    }
+
+    private void setWeapon(Bullet bullet, int weaponType) {
+        System.out.println("weapon clicked");
+        bullet.setType(weaponType);
     }
 
 }
