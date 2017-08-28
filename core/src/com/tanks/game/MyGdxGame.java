@@ -51,6 +51,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     private OnScreenObject restart;
     private int round;
     private boolean gameFinished;
+    private Timer timer;
 
     @Override
     public void create() {
@@ -82,6 +83,8 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         weaponPicker3 = ((GameStage) mainStage).getWeaponPicker3();
 
         restart = ((GameStage) mainStage).getRestart();
+
+        timer = new Timer();
 
         gd = new GestureDetector(this);
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -143,12 +146,30 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         if (bulletHitTank(bullet1, tank2)) {
             increaseScore(bullet1, 1);
             player1ScoreLabel.setText("" + player1Score);
-            reloadBullet1();
+            ((Bullet) bullet1).setShouldExplode(true);
+            bullet1.started = false;
+            if (timer.isEmpty()) {
+                timer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        reloadBullet1();
+                    }
+                }, 1);
+            }
         }
         if (bulletHitTank(bullet2, tank1)) {
             increaseScore(bullet2, 2);
             player2ScoreLabel.setText("" + player2Score);
-            reloadBullet2();
+            ((Bullet) bullet2).setShouldExplode(true);
+            bullet2.started = false;
+            if (timer.isEmpty()) {
+                timer.scheduleTask(new Timer.Task() {
+                    @Override
+                    public void run() {
+                        reloadBullet2();
+                    }
+                }, 1);
+            }
         }
 
         dt = Gdx.graphics.getDeltaTime();
@@ -167,6 +188,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
 
     private void reloadBullet1() {
         bullet1.setVisible(false);
+        ((Bullet) bullet1).setShouldExplode(false);
         bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
         bullet1.started = false;
         ((Bullet) bullet1).elapsedTime = 0;
@@ -177,6 +199,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
 
     private void reloadBullet2() {
         bullet2.setVisible(false);
+        ((Bullet) bullet2).setShouldExplode(false);
         bullet2.setPosition(tank2.getX() - bullet2.getWidth(), tank2.getY() + tank2.getHeight());
         bullet2.started = false;
         ((Bullet) bullet2).elapsedTime = 0;

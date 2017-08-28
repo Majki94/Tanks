@@ -1,6 +1,10 @@
 package com.tanks.game;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
+import com.badlogic.gdx.graphics.g2d.Batch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 /**
  * Created by majkic on 21.2.17..
@@ -25,17 +29,39 @@ public class Bullet extends OnScreenObject {
     private final double G = 9.81;
     private int currentType = 0;
 
+    private boolean shouldExplode;
+
+    private static final int FRAME_COLS = 4;
+    private static final int FRAME_ROWS = 4;
+    Animation walkAnimation;
+    Texture walkSheet;
+    TextureRegion[] walkFrames;
+    TextureRegion currentFrame;
+    float stateTime;
+
+    public Bullet() {
+        super();
+        createAnimation();
+    }
 
     @Override
-    public void act(float dt) {
-        if(started){
-            elapsedTime += dt;
-            int angle = 45;
-            moveBy((float)(brzinaX * elapsedTime * Math.cos(angle)), (float)(brzinaY * elapsedTime * Math.sin(angle) - 0.5 * G * elapsedTime * elapsedTime));
+    public void draw(Batch b, float parentAlpha) {
+        super.draw(b, parentAlpha);
+        if (shouldExplode) {
+            renderAnimation();
         }
     }
 
-    public void setCurrentType(int weaponType){
+    @Override
+    public void act(float dt) {
+        if (started) {
+            elapsedTime += dt;
+            int angle = 45;
+            moveBy((float) (brzinaX * elapsedTime * Math.cos(angle)), (float) (brzinaY * elapsedTime * Math.sin(angle) - 0.5 * G * elapsedTime * elapsedTime));
+        }
+    }
+
+    public void setCurrentType(int weaponType) {
         switch (weaponType) {
             case TYPE_0:
                 setTexture(new Texture("bullet.png"));
@@ -80,7 +106,7 @@ public class Bullet extends OnScreenObject {
         this.bulletType2Count = bulletType2Count;
     }
 
-    public int getCurrentTypeAmmo(){
+    public int getCurrentTypeAmmo() {
         int retVal = bulletType0Count;
         switch (currentType) {
             case TYPE_0:
@@ -95,4 +121,40 @@ public class Bullet extends OnScreenObject {
         }
         return retVal;
     }
+
+    public boolean isShouldExplode() {
+        return shouldExplode;
+    }
+
+    public void setShouldExplode(boolean shouldExplode) {
+        this.shouldExplode = shouldExplode;
+    }
+
+    private void createAnimation() {
+        walkSheet = new Texture("explosion.png");
+        TextureRegion[][] tmp = TextureRegion.split(walkSheet, walkSheet.getWidth() / FRAME_COLS, walkSheet.getHeight() / FRAME_ROWS);
+        walkFrames = new TextureRegion[FRAME_COLS * FRAME_ROWS];
+        int index = 0;
+        for (int i = 0; i < FRAME_ROWS; i++) {
+            for (int j = 0; j < FRAME_COLS; j++) {
+                walkFrames[index++] = tmp[i][j];
+            }
+        }
+        walkAnimation = new Animation(0.05f, walkFrames);
+        stateTime = 0f;
+    }
+
+    private void renderAnimation() {
+        stateTime += Gdx.graphics.getDeltaTime();
+        currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
+        Texture currentTexture = region.getTexture();
+        region.getTexture().dispose();
+        getStage().getBatch().end();
+        getStage().getBatch().begin();
+        getStage().getBatch().draw(currentFrame, this.getX() - this.getWidth() * 3, this.getY() - this.getHeight(), this.getWidth() * 6, this.getHeight() * 6);
+        getStage().getBatch().end();
+        getStage().getBatch().begin();
+        setCurrentType(getCurrentType());
+    }
+
 }
