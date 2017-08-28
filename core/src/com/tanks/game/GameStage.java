@@ -15,6 +15,12 @@ import com.badlogic.gdx.utils.Align;
 public class GameStage extends Stage {
 
     private static final int WEAPON_PICKER_SIZE = 50;
+    private static final int tankWidth = 80;
+    private static final int tankHeight = 62;
+    public static final int tank1InitialPosX = 40;
+    public static final int tank1InitialPosY = Gdx.graphics.getHeight() / 3;
+    public static final int tank2InitialPosX = Gdx.graphics.getWidth() - tankWidth - 40;
+    public static final int tank2InitialPosY = Gdx.graphics.getHeight() / 3;
     public static final int BULLET_SIZE = 15;
 
     private OnScreenObject land;
@@ -63,16 +69,16 @@ public class GameStage extends Stage {
         tank1 = new OnScreenObject();
         tank1.setTexture(new Texture("tank1.png"));
         tank1.setVisible(true);
-        tank1.setWidth(80);
-        tank1.setHeight(62);
-        tank1.setPosition(40, Gdx.graphics.getHeight() / 3);
+        tank1.setWidth(tankWidth);
+        tank1.setHeight(tankHeight);
+        tank1.setPosition(tank1InitialPosX, tank1InitialPosY);
 
         tank2 = new OnScreenObject();
         tank2.setTexture(new Texture("tank2.png"));
         tank2.setVisible(true);
-        tank2.setWidth(80);
-        tank2.setHeight(62);
-        tank2.setPosition(Gdx.graphics.getWidth() - tank2.getWidth() - 40, Gdx.graphics.getHeight() / 3);
+        tank2.setWidth(tankWidth);
+        tank2.setHeight(tankHeight);
+        tank2.setPosition(tank2InitialPosX, tank2InitialPosY);
 
         bullet1 = new Bullet();
         bullet1.setTexture(new Texture("bullet.png"));
@@ -240,12 +246,12 @@ public class GameStage extends Stage {
         addActor(noAmmo);
     }
 
-    public void update1() {
+    public void updateBullet1() {
         bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
     }
 
-    public void update2() {
-        bullet2.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
+    public void updateBullet2() {
+        bullet2.setPosition(tank2.getX() - bullet2.getWidth(), tank2.getY() + tank2.getHeight());
     }
 
     public OnScreenObject getTank1() {

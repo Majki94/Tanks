@@ -265,6 +265,11 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         ((Bullet) bullet2).setBulletType0Count(Bullet.TYPE_0_INITIAL_COUNT);
         ((Bullet) bullet2).setBulletType1Count(Bullet.TYPE_1_INITIAL_COUNT);
         ((Bullet) bullet2).setBulletType2Count(Bullet.TYPE_2_INITIAL_COUNT);
+
+        tank1.setPosition(GameStage.tank1InitialPosX, GameStage.tank1InitialPosY);
+        ((GameStage) mainStage).updateBullet1();
+        tank2.setPosition(GameStage.tank2InitialPosX, GameStage.tank2InitialPosY);
+        ((GameStage) mainStage).updateBullet2();
     }
 
     @Override
@@ -410,10 +415,10 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         if (!bullet1.isVisible() && !bullet2.isVisible()) {
             if (turn % 2 == 0) {
                 tank1.moveBy(side, 0);
-                bullet1.setPosition(tank1.getX() + tank1.getWidth(), tank1.getY() + tank1.getHeight());
+                ((GameStage)mainStage).updateBullet1();
             } else {
                 tank2.moveBy(side, 0);
-                bullet2.setPosition(tank2.getX() - bullet2.getWidth(), tank2.getY() + tank2.getHeight());
+                ((GameStage)mainStage).updateBullet2();
             }
         } else {
             leftArrowClicked = false;
