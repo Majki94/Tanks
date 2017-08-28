@@ -147,7 +147,6 @@ public class Bullet extends OnScreenObject {
     private void renderAnimation() {
         stateTime += Gdx.graphics.getDeltaTime();
         currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
-        Texture currentTexture = region.getTexture();
         region.getTexture().dispose();
         getStage().getBatch().end();
         getStage().getBatch().begin();
