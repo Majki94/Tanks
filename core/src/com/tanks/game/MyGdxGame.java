@@ -14,6 +14,8 @@ import com.badlogic.gdx.utils.viewport.Viewport;
 
 public class MyGdxGame implements ApplicationListener, GestureDetector.GestureListener {
 
+    private static final int MAX_ROUNDS = 10;
+
     private InputMultiplexer multiplexer;
     private Stage mainStage;
     private OnScreenObject land;
@@ -45,6 +47,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     private OnScreenObject weaponPicker2;
     private OnScreenObject weaponPicker3;
     private OnScreenObject weaponPickerBg;
+    private OnScreenObject restart;
     private int round;
     private boolean gameFinished;
 
@@ -76,6 +79,8 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         weaponPicker1 = ((GameStage) mainStage).getWeaponPicker1();
         weaponPicker2 = ((GameStage) mainStage).getWeaponPicker2();
         weaponPicker3 = ((GameStage) mainStage).getWeaponPicker3();
+
+        restart = ((GameStage) mainStage).getRestart();
 
         gd = new GestureDetector(this);
         camera = new OrthographicCamera(Gdx.graphics.getWidth(), Gdx.graphics.getHeight());
@@ -112,10 +117,14 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         }
 
         round = turn / 2 + 1;
-        if (round > 10){
+        if (round > MAX_ROUNDS) {
             endGame();
         }
-        roundLabel.setText("Round : " + round);
+        if (round < MAX_ROUNDS) {
+            roundLabel.setText("Round : " + round);
+        } else {
+            roundLabel.setText("Round : " + MAX_ROUNDS);
+        }
 
         if (leftArrowClicked) {
             moveTankOnTurn(-MOVE_LENGTH);
@@ -183,22 +192,28 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
     private void increaseScore(OnScreenObject bullet, int player) {
         int type = ((Bullet) bullet).getCurrentType();
         if (player == 1) {
-            switch (type){
-                case Bullet.TYPE_0 :
-                    player1Score += 1; break;
-                case Bullet.TYPE_1 :
-                    player1Score += 3; break;
-                case Bullet.TYPE_2 :
-                    player1Score += 5; break;
+            switch (type) {
+                case Bullet.TYPE_0:
+                    player1Score += 1;
+                    break;
+                case Bullet.TYPE_1:
+                    player1Score += 3;
+                    break;
+                case Bullet.TYPE_2:
+                    player1Score += 5;
+                    break;
             }
         } else {
-            switch (type){
-                case Bullet.TYPE_0 :
-                    player2Score += 1; break;
-                case Bullet.TYPE_1 :
-                    player2Score += 3; break;
-                case Bullet.TYPE_2 :
-                    player2Score += 5; break;
+            switch (type) {
+                case Bullet.TYPE_0:
+                    player2Score += 1;
+                    break;
+                case Bullet.TYPE_1:
+                    player2Score += 3;
+                    break;
+                case Bullet.TYPE_2:
+                    player2Score += 5;
+                    break;
             }
         }
     }
@@ -207,11 +222,33 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         gameFinished = true;
         if (player1Score > player2Score) {
             ((GameStage) mainStage).getPlayer1Wins().setVisible(true);
-        } else if(player1Score == player2Score){
+        } else if (player1Score == player2Score) {
             ((GameStage) mainStage).getNoWinner().setVisible(true);
         } else {
             ((GameStage) mainStage).getPlayer2Wins().setVisible(true);
         }
+        restart.setVisible(true);
+    }
+
+
+    private void restartOnClick(float x, float y) {
+        if (inRange(x, restart.getX(), restart.getX() + restart.getWidth()) &&
+                inRange(Gdx.graphics.getHeight() - y, restart.getY(), restart.getY() + restart.getHeight())) {
+            restartGame();
+        }
+    }
+
+    private void restartGame() {
+        ((GameStage) mainStage).getPlayer1Wins().setVisible(false);
+        ((GameStage) mainStage).getNoWinner().setVisible(false);
+        ((GameStage) mainStage).getPlayer2Wins().setVisible(false);
+        restart.setVisible(false);
+        player1Score = 0;
+        player1ScoreLabel.setText("0");
+        player2Score = 0;
+        player2ScoreLabel.setText("0");
+        turn = 0;
+        gameFinished = false;
     }
 
     @Override
@@ -259,6 +296,8 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             weaponOnClick(weaponPicker1, x, y, Bullet.TYPE_0);
             weaponOnClick(weaponPicker2, x, y, Bullet.TYPE_1);
             weaponOnClick(weaponPicker3, x, y, Bullet.TYPE_2);
+        } else if (restart.isVisible()) {
+            restartOnClick(x, y);
         }
         return false;
     }

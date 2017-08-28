@@ -38,6 +38,7 @@ public class GameStage extends Stage {
     private OnScreenObject weaponPicker1;
     private OnScreenObject weaponPicker2;
     private OnScreenObject weaponPicker3;
+    private OnScreenObject restart;
 
     public GameStage() {
 
@@ -171,11 +172,18 @@ public class GameStage extends Stage {
         player2Wins.setPosition((Gdx.graphics.getWidth() - player2Wins.getWidth())/2, (Gdx.graphics.getHeight() - player2Wins.getHeight())/2);
 
         noWinner = new OnScreenObject();
-        noWinner.setTexture(new Texture("player2Wins.png"));
+        noWinner.setTexture(new Texture("noWinner.png"));
         noWinner.setVisible(false);
         noWinner.setWidth(500);
         noWinner.setHeight(60);
         noWinner.setPosition((Gdx.graphics.getWidth() - noWinner.getWidth())/2, (Gdx.graphics.getHeight() - noWinner.getHeight())/2);
+
+        restart = new OnScreenObject();
+        restart.setTexture(new Texture("restart.png"));
+        restart.setVisible(false);
+        restart.setWidth(80);
+        restart.setHeight(80);
+        restart.setPosition((Gdx.graphics.getWidth() - restart.getWidth())/2, (Gdx.graphics.getHeight() - restart.getHeight())/2 - restart.getHeight());
 
         addActor(land);
         addActor(sky);
@@ -197,6 +205,7 @@ public class GameStage extends Stage {
         addActor(player1Wins);
         addActor(player2Wins);
         addActor(noWinner);
+        addActor(restart);
     }
 
     public void update1() {
@@ -373,5 +382,13 @@ public class GameStage extends Stage {
 
     public void setNoWinner(OnScreenObject noWinner) {
         this.noWinner = noWinner;
+    }
+
+    public OnScreenObject getRestart() {
+        return restart;
+    }
+
+    public void setRestart(OnScreenObject restart) {
+        this.restart = restart;
     }
 }
