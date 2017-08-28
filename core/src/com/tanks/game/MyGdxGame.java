@@ -9,6 +9,7 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 
@@ -108,12 +109,18 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             int type = ((Bullet) bullet1).getCurrentType();
             OnScreenObject onScreenObject = getWeaponForCurrentType(type);
             weaponPickerBg.setPosition(onScreenObject.getX(), onScreenObject.getY());
+            ((GameStage) mainStage).getType0CountLabel().setText("" + ((Bullet) bullet1).getBulletType0Count());
+            ((GameStage) mainStage).getType1CountLabel().setText("" + ((Bullet) bullet1).getBulletType1Count());
+            ((GameStage) mainStage).getType2CountLabel().setText("" + ((Bullet) bullet1).getBulletType2Count());
         } else {
             player1StringImage.setVisible(false);
             player2StringImage.setVisible(true);
             int type = ((Bullet) bullet2).getCurrentType();
             OnScreenObject onScreenObject = getWeaponForCurrentType(type);
             weaponPickerBg.setPosition(onScreenObject.getX(), onScreenObject.getY());
+            ((GameStage) mainStage).getType0CountLabel().setText("" + ((Bullet) bullet2).getBulletType0Count());
+            ((GameStage) mainStage).getType1CountLabel().setText("" + ((Bullet) bullet2).getBulletType1Count());
+            ((GameStage) mainStage).getType2CountLabel().setText("" + ((Bullet) bullet2).getBulletType2Count());
         }
 
         round = turn / 2 + 1;
@@ -249,6 +256,15 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         player2ScoreLabel.setText("0");
         turn = 0;
         gameFinished = false;
+        ((Bullet) bullet1).setCurrentType(Bullet.TYPE_0);
+        ((Bullet) bullet1).setBulletType0Count(Bullet.TYPE_0_INITIAL_COUNT);
+        ((Bullet) bullet1).setBulletType1Count(Bullet.TYPE_1_INITIAL_COUNT);
+        ((Bullet) bullet1).setBulletType2Count(Bullet.TYPE_2_INITIAL_COUNT);
+
+        ((Bullet) bullet2).setCurrentType(Bullet.TYPE_0);
+        ((Bullet) bullet2).setBulletType0Count(Bullet.TYPE_0_INITIAL_COUNT);
+        ((Bullet) bullet2).setBulletType1Count(Bullet.TYPE_1_INITIAL_COUNT);
+        ((Bullet) bullet2).setBulletType2Count(Bullet.TYPE_2_INITIAL_COUNT);
     }
 
     @Override
@@ -272,16 +288,38 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
         if (!gameFinished) {
             if (turn % 2 == 0 && !bullet1.isVisible() && !bullet2.isVisible()) {
                 //prvi igrac igra
-                bullet1.setVisible(true);
-                bullet1.started = true;
-                bullet1.brzinaX = velocityX * scale;
-                bullet1.brzinaY = -velocityY * scale;
+                if (((Bullet) bullet1).getCurrentTypeAmmo() != 0) {
+                    bullet1.setVisible(true);
+                    bullet1.started = true;
+                    bullet1.brzinaX = velocityX * scale;
+                    bullet1.brzinaY = -velocityY * scale;
+                    updateBulletsCountState((Bullet) bullet1, ((Bullet) bullet1).getCurrentType());
+                } else {
+                    ((GameStage)mainStage).getNoAmmo().setVisible(true);
+                    new Timer().scheduleTask(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            ((GameStage)mainStage).getNoAmmo().setVisible(false);
+                        }
+                    }, 1);
+                }
             } else if (!bullet1.isVisible() && !bullet2.isVisible()) {
                 //drugi igrac igra
-                bullet2.setVisible(true);
-                bullet2.started = true;
-                bullet2.brzinaX = velocityX * scale;
-                bullet2.brzinaY = -velocityY * scale;
+                if (((Bullet) bullet2).getCurrentTypeAmmo() != 0) {
+                    bullet2.setVisible(true);
+                    bullet2.started = true;
+                    bullet2.brzinaX = velocityX * scale;
+                    bullet2.brzinaY = -velocityY * scale;
+                    updateBulletsCountState((Bullet) bullet2, ((Bullet) bullet2).getCurrentType());
+                } else {
+                    ((GameStage)mainStage).getNoAmmo().setVisible(true);
+                    new Timer().scheduleTask(new Timer.Task() {
+                        @Override
+                        public void run() {
+                            ((GameStage)mainStage).getNoAmmo().setVisible(false);
+                        }
+                    }, 1);
+                }
             }
         }
 
@@ -409,6 +447,20 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
             return weaponPicker2;
         } else {
             return weaponPicker3;
+        }
+    }
+
+    private void updateBulletsCountState(Bullet bullet, int type){
+        switch (type){
+            case 0 :
+                bullet.setBulletType0Count(bullet.getBulletType0Count() - 1);
+                break;
+            case 1 :
+                bullet.setBulletType1Count(bullet.getBulletType1Count() - 1);
+                break;
+            case 2 :
+                bullet.setBulletType2Count(bullet.getBulletType2Count() - 1);
+                break;
         }
     }
 

@@ -39,6 +39,10 @@ public class GameStage extends Stage {
     private OnScreenObject weaponPicker2;
     private OnScreenObject weaponPicker3;
     private OnScreenObject restart;
+    private Label type0CountLabel;
+    private Label type1CountLabel;
+    private Label type2CountLabel;
+    private Label noAmmo;
 
     public GameStage() {
 
@@ -185,6 +189,30 @@ public class GameStage extends Stage {
         restart.setHeight(80);
         restart.setPosition((Gdx.graphics.getWidth() - restart.getWidth())/2, (Gdx.graphics.getHeight() - restart.getHeight())/2 - restart.getHeight());
 
+        type0CountLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
+        type0CountLabel.setAlignment(Align.center);
+        type0CountLabel.setVisible(true);
+        type0CountLabel.setPosition(getWidth() - 3 * WEAPON_PICKER_SIZE - 10, 10);
+        type0CountLabel.setFontScale(1);
+
+        type1CountLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
+        type1CountLabel.setAlignment(Align.center);
+        type1CountLabel.setVisible(true);
+        type1CountLabel.setPosition(getWidth() - 2 * WEAPON_PICKER_SIZE - 10, 10);
+        type1CountLabel.setFontScale(1);
+
+        type2CountLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
+        type2CountLabel.setAlignment(Align.center);
+        type2CountLabel.setVisible(true);
+        type2CountLabel.setPosition(getWidth() - WEAPON_PICKER_SIZE - 10, 10);
+        type2CountLabel.setFontScale(1);
+
+        noAmmo = new Label("No Ammo", new Label.LabelStyle(font, Color.RED));
+        noAmmo.setAlignment(Align.center);
+        noAmmo.setVisible(false);
+        noAmmo.setPosition(getWidth()/2 - noAmmo.getWidth()/2, getHeight()/2 - noAmmo.getHeight()/2);
+        noAmmo.setFontScale(1);
+
         addActor(land);
         addActor(sky);
         addActor(tank1);
@@ -206,6 +234,10 @@ public class GameStage extends Stage {
         addActor(player2Wins);
         addActor(noWinner);
         addActor(restart);
+        addActor(type0CountLabel);
+        addActor(type1CountLabel);
+        addActor(type2CountLabel);
+        addActor(noAmmo);
     }
 
     public void update1() {
@@ -390,5 +422,37 @@ public class GameStage extends Stage {
 
     public void setRestart(OnScreenObject restart) {
         this.restart = restart;
+    }
+
+    public Label getType0CountLabel() {
+        return type0CountLabel;
+    }
+
+    public void setType0CountLabel(Label type0CountLabel) {
+        this.type0CountLabel = type0CountLabel;
+    }
+
+    public Label getType1CountLabel() {
+        return type1CountLabel;
+    }
+
+    public void setType1CountLabel(Label type1CountLabel) {
+        this.type1CountLabel = type1CountLabel;
+    }
+
+    public Label getType2CountLabel() {
+        return type2CountLabel;
+    }
+
+    public void setType2CountLabel(Label type2CountLabel) {
+        this.type2CountLabel = type2CountLabel;
+    }
+
+    public Label getNoAmmo() {
+        return noAmmo;
+    }
+
+    public void setNoAmmo(Label noAmmo) {
+        this.noAmmo = noAmmo;
     }
 }
