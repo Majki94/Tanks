@@ -14,7 +14,7 @@ import com.badlogic.gdx.utils.Align;
 
 public class GameStage extends Stage {
 
-    private static final int WEAPON_PICKER_SIZE = 50;
+    private static final int WEAPON_PICKER_SIZE = 80;
     private static final int tankWidth = 80;
     private static final int tankHeight = 62;
     public static final int tank1InitialPosX = 40;
@@ -127,17 +127,17 @@ public class GameStage extends Stage {
         player1ScoreLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
         player1ScoreLabel.setAlignment(Align.center);
         player1ScoreLabel.setPosition(Gdx.graphics.getWidth() * 0.05f, Gdx.graphics.getHeight() * 0.93f);
-        player1ScoreLabel.setFontScale(1);
+        player1ScoreLabel.setFontScale(1.3f);
 
         player2ScoreLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
         player2ScoreLabel.setAlignment(Align.center);
         player2ScoreLabel.setPosition(Gdx.graphics.getWidth() * 0.95f, Gdx.graphics.getHeight() * 0.93f);
-        player2ScoreLabel.setFontScale(1);
+        player2ScoreLabel.setFontScale(1.3f);
 
         roundLabel = new Label("0", new Label.LabelStyle(font, Color.BLACK));
         roundLabel.setAlignment(Align.center);
         roundLabel.setPosition((Gdx.graphics.getWidth() - roundLabel.getWidth()) / 2, Gdx.graphics.getHeight() - 20);
-        roundLabel.setFontScale(1);
+        roundLabel.setFontScale(1.3f);
 
         weaponPickerBg = new OnScreenObject();
         weaponPickerBg.setTexture(new Texture("weaponPickerBg.png"));
