@@ -394,16 +394,7 @@ public class MyGdxGame implements ApplicationListener, GestureDetector.GestureLi
 
     @Override
     public boolean zoom(float initialDistance, float distance) {
-        if (!gameFinished) {
-            if (initialDistance < distance) {
-                camera.zoom *= (1 - ZOOM_SPEED);
-            } else {
-                camera.zoom *= (1 + ZOOM_SPEED);
-            }
-            System.out.println("ZOOOOOOM!!!!!!");
-        }
         return false;
-
     }
 
     @Override
